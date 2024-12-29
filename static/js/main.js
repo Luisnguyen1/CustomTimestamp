@@ -154,25 +154,29 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.lineWidth = 1;
 
         // Tính toán kích thước font và vị trí
-        const fontSizeTimestamp = Math.floor(canvas.height * 0.055); // Giảm kích thước font timestamp
-        const fontSizeLocation = Math.floor(canvas.height * 0.04); // Giảm kích thước font location
+        const fontSizeTimestamp = Math.floor(canvas.height * 0.035); // Giảm kích thước font timestamp
+        const fontSizeLocation = Math.floor(canvas.height * 0.03); // Giảm kích thước font location
 
         // Vẽ timestamp
         ctx.font = `bold ${fontSizeTimestamp}px Arial`;
-        const timestampY = canvas.height - (canvas.height * 0.2); // Đẩy timestamp lên cao hơn
-        ctx.fillText(timestamp, canvas.width * 0.05, timestampY);
+        const timestampY = canvas.height - (canvas.height * 0.15); // Điều chỉnh vị trí Y
+        ctx.fillText(timestamp, canvas.width * 0.03, timestampY);
 
         // Vẽ địa chỉ
         ctx.font = `${fontSizeLocation}px Arial`;
         
         // Tính toán vị trí cho từng dòng địa chỉ
-        const lineSpacing = fontSizeLocation * 1.3; // Tăng khoảng cách giữa các dòng
+        const lineSpacing = fontSizeLocation * 1.2; // Giảm khoảng cách giữa các dòng
         const addressParts = location.split(',').map(part => part.trim());
         
-        // Vẽ từng dòng địa chỉ với khoảng cách đều nhau
+        // Tính toán vị trí bắt đầu để các dòng nằm ở góc dưới
+        const totalHeight = lineSpacing * (addressParts.length - 1);
+        const startY = canvas.height - (canvas.height * 0.05); // Đặt vị trí bắt đầu gần bottom hơn
+        
+        // Vẽ từng dòng địa chỉ
         addressParts.forEach((part, index) => {
-            const y = timestampY + (index + 1) * lineSpacing;
-            ctx.fillText(part, canvas.width * 0.05, y);
+            const y = startY - (addressParts.length - 1 - index) * lineSpacing;
+            ctx.fillText(part.trim(), canvas.width * 0.03, y);
         });
 
         // Chuyển canvas thành blob với chất lượng cao
