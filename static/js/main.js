@@ -150,41 +150,43 @@ document.addEventListener('DOMContentLoaded', function() {
         // Thiết lập style cho text
         ctx.fillStyle = 'white';
         ctx.shadowColor = 'black';
-        ctx.shadowBlur = 4;
+        ctx.shadowBlur = 2;
         ctx.lineWidth = 1;
 
-        // Tính toán kích thước font dựa trên chiều cao của canvas
-        const fontSizeTimestamp = Math.floor(canvas.height * 0.035); // 3.5% chiều cao canvas
-        const fontSizeLocation = Math.floor(canvas.height * 0.03); // 3% chiều cao canvas
+        // Tính toán kích thước font và vị trí
+        const fontSizeTimestamp = Math.floor(canvas.height * 0.045); // Tăng kích thước font
+        const fontSizeLocation = Math.floor(canvas.height * 0.04);
 
         // Vẽ timestamp
-        ctx.font = `${fontSizeTimestamp}px Arial`;
-        ctx.fillText(timestamp, canvas.width * 0.05, canvas.height * 0.95);
+        ctx.font = `bold ${fontSizeTimestamp}px Arial`;
+        const timestampY = canvas.height - (canvas.height * 0.05); // Đặt vị trí Y gần bottom hơn
+        ctx.fillText(timestamp, canvas.width * 0.03, timestampY);
 
-        // Vẽ location (địa chỉ)
+        // Vẽ địa chỉ trên cùng một dòng
         ctx.font = `${fontSizeLocation}px Arial`;
-        const locationParts = location.split(',');
-        let yPosition = canvas.height * 0.97;
+        const addressParts = location.split(',').map(part => part.trim());
         
-        // Vẽ từng phần của địa chỉ trên từng dòng
-        locationParts.forEach((part, index) => {
-            if (index === locationParts.length - 1) {
-                // Dòng cuối (Hồ Chí Minh)
-                ctx.fillText(part.trim(), canvas.width * 0.75, yPosition);
-            } else if (index === locationParts.length - 2) {
-                // Dòng áp cuối (Tân Phú)
-                ctx.fillText(part.trim(), canvas.width * 0.65, yPosition);
-            } else {
-                // Dòng địa chỉ
-                ctx.fillText(part.trim(), canvas.width * 0.05, yPosition);
-            }
-        });
+        // Tính toán vị trí cho từng phần của địa chỉ
+        const streetAddress = addressParts[0];
+        const district = addressParts[1];
+        const city = addressParts[2];
+        
+        // Vẽ địa chỉ theo thứ tự và căn chỉnh
+        const addressY = timestampY + fontSizeLocation * 1.2; // Đặt địa chỉ dưới timestamp
+        
+        // Vẽ số nhà và đường
+        ctx.fillText(streetAddress, canvas.width * 0.03, addressY);
+        
+        // Vẽ quận và thành phố (căn phải)
+        const districtAndCity = `${district} ${city}`;
+        const textWidth = ctx.measureText(districtAndCity).width;
+        ctx.fillText(districtAndCity, canvas.width - textWidth - (canvas.width * 0.03), addressY);
 
-        // Chuyển canvas thành blob
+        // Chuyển canvas thành blob với chất lượng cao
         canvas.toBlob((blob) => {
             currentImageBlob = blob;
             showModal('downloadModal');
-        }, 'image/jpeg', 0.95); // Tăng chất lượng ảnh lên 95%
+        }, 'image/jpeg', 1.0); // Sử dụng chất lượng tối đa
     });
 
     // Xử lý nút tải về
