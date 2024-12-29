@@ -143,16 +143,19 @@ document.addEventListener('DOMContentLoaded', function() {
         // Vẽ video lên canvas
         ctx.drawImage(video, 0, 0);
         
-        // Thêm timestamp và location
+        // Thêm timestamp và location với font size lớn hơn
         const timestamp = document.getElementById('timestamp').textContent;
         const location = document.getElementById('location').textContent;
         
         ctx.fillStyle = 'white';
-        ctx.font = '20px Arial';
+        ctx.font = '48px Arial';
         ctx.shadowColor = 'black';
-        ctx.shadowBlur = 4;
-        ctx.fillText(timestamp, 20, canvas.height - 60);
-        ctx.fillText(location, 20, canvas.height - 30);
+        ctx.shadowBlur = 8;
+        ctx.lineWidth = 2;
+        
+        // Điều chỉnh vị trí text để không bị che khuất
+        ctx.fillText(timestamp, 40, canvas.height - 100);
+        ctx.fillText(location, 40, canvas.height - 40);
 
         // Chuyển canvas thành blob
         canvas.toBlob((blob) => {
