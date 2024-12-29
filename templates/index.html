@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Camera với Timestamp</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="camera-container">
+        <!-- Video stream container -->
+        <div class="video-feed">
+            <video id="video" autoplay playsinline></video>
+            <canvas id="canvas" style="display: none;"></canvas>
+        </div>
+
+        <!-- Location and timestamp overlay -->
+        <div class="info-overlay">
+            <div class="info-row">
+                <span id="timestamp"></span>
+                <button id="editTimestampBtn" class="edit-btn">✎</button>
+            </div>
+            <div class="info-row">
+                <span id="location"></span>
+                <button id="editLocationBtn" class="edit-btn">✎</button>
+            </div>
+        </div>
+
+        <!-- Camera controls -->
+        <div class="camera-controls">
+            <div class="control-button capture-button" id="captureButton">
+                <div class="capture-inner"></div>
+            </div>
+        </div>
+
+        <!-- Download Modal -->
+        <div id="downloadModal" class="modal">
+            <div class="modal-content">
+                <h3>Bạn có muốn tải ảnh về không?</h3>
+                <div class="modal-buttons">
+                    <button id="downloadBtn">Tải về</button>
+                    <button id="cancelBtn">Hủy</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Timestamp Modal -->
+        <div id="editTimestampModal" class="modal">
+            <div class="modal-content">
+                <h3>Chỉnh sửa timestamp</h3>
+                <input type="text" id="customTimestamp" class="timestamp-input" placeholder="Nhập nội dung tùy chỉnh">
+                <div class="modal-buttons">
+                    <button id="saveTimestampBtn">Lưu</button>
+                    <button id="cancelTimestampBtn">Hủy</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Location Modal -->
+        <div id="editLocationModal" class="modal">
+            <div class="modal-content">
+                <h3>Chỉnh sửa vị trí</h3>
+                <input type="text" id="customLocation" class="location-input" placeholder="Nhập địa chỉ tùy chỉnh">
+                <div class="modal-buttons">
+                    <button id="saveLocationBtn">Lưu</button>
+                    <button id="cancelLocationBtn">Hủy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html> 

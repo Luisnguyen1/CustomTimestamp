@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./static/captures:/app/static/captures
+    environment:
+      - FLASK_APP=app.py
+      - FLASK_ENV=development
+    devices:
+      - "/dev/video0:/dev/video0" # Để truy cập camera của host
+    restart: unless-stopped 
