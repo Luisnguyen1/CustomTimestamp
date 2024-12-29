@@ -154,28 +154,26 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.lineWidth = 1;
 
         // Tính toán kích thước font và vị trí
-        const fontSizeTimestamp = Math.floor(canvas.height * 0.07); // Tăng kích thước font timestamp
-        const fontSizeLocation = Math.floor(canvas.height * 0.05); // Tăng kích thước font location
+        const fontSizeTimestamp = Math.floor(canvas.height * 0.055); // Giảm kích thước font timestamp
+        const fontSizeLocation = Math.floor(canvas.height * 0.04); // Giảm kích thước font location
 
         // Vẽ timestamp
         ctx.font = `bold ${fontSizeTimestamp}px Arial`;
-        const timestampY = canvas.height - (canvas.height * 0.15); // Đặt timestamp cao hơn một chút
+        const timestampY = canvas.height - (canvas.height * 0.2); // Đẩy timestamp lên cao hơn
         ctx.fillText(timestamp, canvas.width * 0.05, timestampY);
 
         // Vẽ địa chỉ
         ctx.font = `${fontSizeLocation}px Arial`;
-        const addressY = timestampY + fontSizeLocation * 1.2;
         
-        // Tách và vẽ từng phần của địa chỉ
+        // Tính toán vị trí cho từng dòng địa chỉ
+        const lineSpacing = fontSizeLocation * 1.3; // Tăng khoảng cách giữa các dòng
         const addressParts = location.split(',').map(part => part.trim());
-        const streetAddress = addressParts[0];
-        const district = addressParts[1];
-        const city = addressParts[2];
-
-        // Vẽ địa chỉ với khoảng cách và căn chỉnh phù hợp
-        ctx.fillText(streetAddress, canvas.width * 0.05, addressY);
-        ctx.fillText(district, canvas.width * 0.05, addressY + fontSizeLocation * 1.2);
-        ctx.fillText(city, canvas.width * 0.05, addressY + fontSizeLocation * 2.4);
+        
+        // Vẽ từng dòng địa chỉ với khoảng cách đều nhau
+        addressParts.forEach((part, index) => {
+            const y = timestampY + (index + 1) * lineSpacing;
+            ctx.fillText(part, canvas.width * 0.05, y);
+        });
 
         // Chuyển canvas thành blob với chất lượng cao
         canvas.toBlob((blob) => {
