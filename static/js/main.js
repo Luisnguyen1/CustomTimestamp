@@ -143,25 +143,48 @@ document.addEventListener('DOMContentLoaded', function() {
         // Vẽ video lên canvas
         ctx.drawImage(video, 0, 0);
         
-        // Thêm timestamp và location với font size lớn hơn
+        // Lấy nội dung timestamp và location
         const timestamp = document.getElementById('timestamp').textContent;
         const location = document.getElementById('location').textContent;
         
+        // Thiết lập style cho text
         ctx.fillStyle = 'white';
-        ctx.font = '48px Arial';
         ctx.shadowColor = 'black';
-        ctx.shadowBlur = 8;
-        ctx.lineWidth = 2;
+        ctx.shadowBlur = 4;
+        ctx.lineWidth = 1;
+
+        // Tính toán kích thước font dựa trên chiều cao của canvas
+        const fontSizeTimestamp = Math.floor(canvas.height * 0.035); // 3.5% chiều cao canvas
+        const fontSizeLocation = Math.floor(canvas.height * 0.03); // 3% chiều cao canvas
+
+        // Vẽ timestamp
+        ctx.font = `${fontSizeTimestamp}px Arial`;
+        ctx.fillText(timestamp, canvas.width * 0.05, canvas.height * 0.95);
+
+        // Vẽ location (địa chỉ)
+        ctx.font = `${fontSizeLocation}px Arial`;
+        const locationParts = location.split(',');
+        let yPosition = canvas.height * 0.97;
         
-        // Điều chỉnh vị trí text để không bị che khuất
-        ctx.fillText(timestamp, 40, canvas.height - 100);
-        ctx.fillText(location, 40, canvas.height - 40);
+        // Vẽ từng phần của địa chỉ trên từng dòng
+        locationParts.forEach((part, index) => {
+            if (index === locationParts.length - 1) {
+                // Dòng cuối (Hồ Chí Minh)
+                ctx.fillText(part.trim(), canvas.width * 0.75, yPosition);
+            } else if (index === locationParts.length - 2) {
+                // Dòng áp cuối (Tân Phú)
+                ctx.fillText(part.trim(), canvas.width * 0.65, yPosition);
+            } else {
+                // Dòng địa chỉ
+                ctx.fillText(part.trim(), canvas.width * 0.05, yPosition);
+            }
+        });
 
         // Chuyển canvas thành blob
         canvas.toBlob((blob) => {
             currentImageBlob = blob;
             showModal('downloadModal');
-        }, 'image/jpeg');
+        }, 'image/jpeg', 0.95); // Tăng chất lượng ảnh lên 95%
     });
 
     // Xử lý nút tải về
