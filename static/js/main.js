@@ -92,12 +92,19 @@ document.addEventListener('DOMContentLoaded', function() {
     let useCustomLocation = false;
     let customLocationText = '';
 
-    // Khởi tạo camera
-    async function initCamera() {
+    const switchCameraBtn = document.getElementById('switchCameraBtn');
+    let currentFacingMode = 'environment';
+
+    // Hàm khởi tạo camera với facing mode cụ thể
+    async function initCamera(facingMode = 'environment') {
         try {
+            if (video.srcObject) {
+                video.srcObject.getTracks().forEach(track => track.stop());
+            }
+
             const constraints = {
                 video: {
-                    facingMode: "environment",
+                    facingMode: facingMode,
                     width: { ideal: 1920 },
                     height: { ideal: 1080 }
                 }
@@ -106,13 +113,20 @@ document.addEventListener('DOMContentLoaded', function() {
             const stream = await navigator.mediaDevices.getUserMedia(constraints);
             video.srcObject = stream;
             await video.play();
+            currentFacingMode = facingMode;
         } catch (err) {
             console.error("Lỗi khi khởi tạo camera:", err);
             alert("Không thể truy cập camera. Vui lòng kiểm tra quyền truy cập.");
         }
     }
 
-    // Khởi tạo camera khi trang web load
+    // Xử lý nút đổi camera
+    switchCameraBtn.addEventListener('click', () => {
+        const newFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
+        initCamera(newFacingMode);
+    });
+
+    // Khởi tạo camera ban đầu
     initCamera();
 
     // Xử lý nút chụp ảnh
